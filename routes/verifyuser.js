@@ -1,17 +1,17 @@
 const router      = require('express').Router();
 const User        = require('./DB/model');
 const verifyToken = require('./verifyToken');
+const passport        = require('passport');
 
 
 
+router.get('/',passport.authenticate('jwt',  { session: false }),
 
-router.get('/me',
-
-    (req, res, next) => {
+    (req, res) => {
         res.json({
           message: 'You made it to the secure route',
           user: req.user,
-          token: req.query.secret_token
+          token: req.query.token
         })
 
 })

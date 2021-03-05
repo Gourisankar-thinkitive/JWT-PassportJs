@@ -21,25 +21,26 @@ app.use(cors({
     // origin: 'http://localhost:3000/'
 }));
 app.use(session({
-    secret:"my_secret_token",
+    secret:"secret",
     resave:true,
     saveUninitialized:true
 }));
 
-app.use(cookieParser("my_secret_token"));
+app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
-require("./routes/PASSPORTJS/passportConfig")(passport);
 
+require("./routes/PASSPORTJS/auth")(passport);
 
 // routes
 
 app.use('/',login);
 app.use('/', register);
-app.use('/',passport.authenticate('jwt', { session: false }), me);
+app.use('/',me)
 
 
 app.get('/user',(req, res) =>{
+    console.log(req.headers.authorization);
     res.send(req.user);
 })
 app.listen(9090, ()=>{

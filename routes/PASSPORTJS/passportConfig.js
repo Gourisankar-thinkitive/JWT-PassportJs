@@ -7,6 +7,15 @@ const ExtractJWT  = require('passport-jwt').ExtractJwt;
 
 module.exports = (passport) =>{
 
+    var cookieExtractor = (req) =>{
+        var token = null;
+        if (req && req.cookies)
+        {
+            token = req.cookies['jwt'];
+        }
+        return token;
+    };
+
     passport.use('login',
         new localStrategy((username,password, done)=>{
 
@@ -30,22 +39,26 @@ module.exports = (passport) =>{
 
         })
     );
-passport.use('jwt',
-    new JWTStrategy(
-        {
-          secretOrKey: 'my_secret_token',
-          jwtFromRequest: ExtractJWT.fromUrlQueryParameter('token')
-        },
-        async (token, done) => {
-          try {
-            console.log(error)
-            return done(null, token.user);
-          } catch (error) {
-              console.log(error)
-            done(error);
-          }
-        }
-      ));
+    
+// passport.use(
+
+    
+//     new JWTStrategy(
+//         {
+//           secretOrKey: 'my_secret_token',
+//           jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
+//         },
+//         async (token, done) => {
+//           try {
+
+//             console.log("token: "+token)
+//             return done(null, token.user);
+//           } catch (error) {
+//               console.log(error)
+//             done(error);
+//           }
+//         }
+//       ));
 
     passport.serializeUser((user, cb)=>{
         cb(null, user.id);
